@@ -1,0 +1,49 @@
+﻿@page "/"
+
+
+<PageTitle>Home</PageTitle>
+
+<h3 class="fs-1">In Billboard:</h3>
+<MovieList Movies="inBillboard"/>
+
+<h3 class="fs-1">Futures Premiere:</h3>
+<MovieList Movies="futuresPremiere" />
+
+@code {
+    
+    private List<Movie> inBillboard = new List<Movie>()
+    {
+        new Movie
+        {
+            Id = 1,
+            Title = "Captain America",
+            ReleaseDate = new DateTime(2025, 2, 14)
+        },
+
+        new Movie
+        {
+            Id = 1,
+            Title = "Mission: Impossible - Dead Reckoning Part Two",
+            ReleaseDate = new DateTime(2025, 5, 23)
+        }
+
+    };
+
+    private List<Movie> futuresPremiere = new List<Movie>()
+    {
+        new Movie
+        {
+            Id = 1,
+            Title = "Batman 22",
+            ReleaseDate = new DateTime(2026, 2, 14)
+        },
+
+        new Movie
+        {
+            Id = 1,
+            Title = "Fast and Furios X2",
+            ReleaseDate = new DateTime(2027, 5, 23)
+        }
+
+    };
+}
