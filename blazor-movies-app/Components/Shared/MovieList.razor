@@ -1,21 +1,23 @@
-﻿
+﻿@if (Movies != null)
+{
+    <div>
+        @foreach (var movie in Movies)
+        {
+            <MovieItem Movie="movie"/>
+        }
+    </div>
+    
+}
 
-<div>
-    @foreach (var movie in Movies)
-    {
-     <p>
-         Title: 
-            <b>@movie.Title</b>
-     </p>
-     
-        <p>Relase Date: <b>@movie.ReleaseDate.ToString("dd MMM yyyy")</b></p>
-    }
-</div>
+else
+{
+    <Loading/>
+}
 
 
 @code {
     
-    [Parameter] public required List<Movie> Movies { get; set; }
+    [Parameter, EditorRequired] public List<Movie>? Movies { get; set; }
 
 
 

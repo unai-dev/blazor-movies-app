@@ -1,0 +1,53 @@
+﻿
+<button type="@Type.ToString()" @onclick="EventClick" class="@CssClass" disabled="@Disabled" @attributes="AdditionalAttributes">@Text</button>
+
+@code {
+    [Parameter] public string Text { get; set; } = "Sumbit";
+    [Parameter] public bool Disabled { get; set; }
+    [Parameter] public ButtonType Type { get; set; } = ButtonType.Button;
+    [Parameter] public Variante Variante { get; set; } = Variante.Primary;
+    [Parameter] public Size Size { get; set; } = Size.Md;
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+
+    private void EventClick()
+    {
+        Console.WriteLine("Hello World!");
+    }
+
+    private string CssClass
+    {
+        get
+        {
+
+            var cssClassesOfDad = string.Empty;
+
+            if (AdditionalAttributes != null && AdditionalAttributes.ContainsKey("class"))
+            {
+                cssClassesOfDad = AdditionalAttributes["class"].ToString()!;
+            }
+
+
+            string[] classes = [
+                "btn",
+                Variante switch {
+                    Variante.Primary => "btn-primary",
+                    Variante.Secondary => "btn-secondary",
+                    Variante.Exit => "btn-success",
+                    Variante.Warning => "btn-warning",
+                    Variante.Error => "btn-danger",
+                    _ => "btn-primary"
+                },
+                Size switch {
+                    Size.Sm => "btn-sm",
+                    Size.Md => "btn-md",
+                    Size.Lg => "btn-lg",
+                    _ => "btn-md",
+                },
+                cssClassesOfDad
+            ];
+
+            return string.Join(" ", classes);
+        }
+    }
+}

@@ -1,17 +1,30 @@
 ﻿@page "/"
+@attribute [StreamRendering]
+@rendermode InteractiveServer
 
 
 <PageTitle>Home</PageTitle>
 
 <h3 class="fs-1">In Billboard:</h3>
-<MovieList Movies="inBillboard"/>
+<MovieList Movies="inBillboard" />
 
 <h3 class="fs-1">Futures Premiere:</h3>
 <MovieList Movies="futuresPremiere" />
 
+<BPButton Text="Enviar" Type="ButtonType.Sumbit" Variante="Variante.Warning" Size="Size.Md" />
+
 @code {
-    
-    private List<Movie> inBillboard = new List<Movie>()
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        await Task.Delay(2000);
+
+        inBillboard = new List<Movie>()
     {
         new Movie
         {
@@ -28,8 +41,7 @@
         }
 
     };
-
-    private List<Movie> futuresPremiere = new List<Movie>()
+        futuresPremiere = new List<Movie>()
     {
         new Movie
         {
@@ -46,4 +58,10 @@
         }
 
     };
+        StateHasChanged();
+    }
+
+    private List<Movie>? inBillboard = null;
+
+    private List<Movie>? futuresPremiere = null;
 }
