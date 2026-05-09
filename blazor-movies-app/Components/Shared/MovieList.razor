@@ -1,4 +1,4 @@
-﻿@if (movies != null)
+﻿@if (movies is not null)
 {
     <div>
         @foreach (var movie in movies)
@@ -8,16 +8,18 @@
     </div>
     
 }
-
 else
 {
-    <Loading/>
+    @Loading
 }
 
 
 @code {
 
     [Parameter, EditorRequired] public List<Movie>? Movies { get; set; }
+    [Parameter] public RenderFragment? Loading { get; set; } =@<Loading/>;
+
+
     private List<Movie>? movies = null;
 
     protected override void OnInitialized()

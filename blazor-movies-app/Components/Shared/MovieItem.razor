@@ -2,7 +2,7 @@
 <p>
     Title:
     <b>@Movie.Title</b>
-    <BPButton Text="Remove" OnClick="@(() => RemoveMovie.InvokeAsync(Movie))" />
+    <BPButton OnClick="@(() => RemoveMovie.InvokeAsync(Movie))">Remove</BPButton>
 </p>
      
 <p>Relase Date: <b>@Movie.ReleaseDate.ToString("dd MMM yyyy")</b></p>
