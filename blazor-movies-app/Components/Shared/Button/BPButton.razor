@@ -1,5 +1,5 @@
 ﻿
-<button type="@Type.ToString()" @onclick="EventClick" class="@CssClass" disabled="@Disabled" @attributes="AdditionalAttributes">@Text</button>
+<button type="@Type.ToString()" @onclick="OnClick" class="@CssClass" disabled="@Disabled" @attributes="AdditionalAttributes">@Text</button>
 
 @code {
     [Parameter] public string Text { get; set; } = "Sumbit";
@@ -8,6 +8,7 @@
     [Parameter] public Variante Variante { get; set; } = Variante.Primary;
     [Parameter] public Size Size { get; set; } = Size.Md;
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
 
 
     private void EventClick()

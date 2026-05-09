@@ -1,0 +1,54 @@
+﻿@page "/bind-after"
+@rendermode InteractiveServer
+
+<h3>BindAfter</h3>
+
+<input @bind="searching" @bind:after="Search" @bind:event="oninput" />
+
+@if (!string.IsNullOrEmpty(searching))
+{
+    if (loading)
+    {
+        <Loading/>
+    } else
+    {
+        <p>People:</p>
+
+        <ul>
+            @foreach (var p in peopleSearched)
+            {
+                <li @key="p">@p</li>
+            }
+        </ul>
+    }
+}
+
+@code {
+
+    private string searching = string.Empty;
+    private List<string> peopleSearched = [];
+    private bool loading = false;
+
+
+
+    private async Task Search()
+    {
+        loading = true;
+
+
+        var people = new List<string>()
+        {
+            "Felipe",
+            "Unai",
+            "Benito",
+            "Felipe",
+            "Unai",
+            "Benito"
+        };
+
+        await Task.Delay(1000);
+
+        peopleSearched = people.Where(p => p.Contains(searching, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        loading = false;
+    }
+}

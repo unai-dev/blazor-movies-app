@@ -5,15 +5,27 @@
 
 <PageTitle>Home</PageTitle>
 
-<h3 class="fs-1">In Billboard:</h3>
-<MovieList Movies="inBillboard" />
 
-<h3 class="fs-1">Futures Premiere:</h3>
-<MovieList Movies="futuresPremiere" />
+<input type="checkbox" @bind="showMovies" />
+Show Movies
 
-<BPButton Text="Enviar" Type="ButtonType.Sumbit" Variante="Variante.Warning" Size="Size.Md" />
+@if (showMovies)
+{
+    <h3 class="fs-1">In Billboard:</h3>
+    <MovieList Movies="inBillboard" />
+
+    <h3 class="fs-1">Futures Premiere:</h3>
+    <MovieList Movies="futuresPremiere" />
+
+    <BPButton Text="Enviar" Type="ButtonType.Sumbit" Variante="Variante.Warning" Size="Size.Md" OnClick="ManageClick" />
+    <BPButton Text="Enviar 2" Type="ButtonType.Sumbit" Variante="Variante.Warning" Size="Size.Md" OnClick="@(() => ManageClick("Click button 2"))" />
+    
+}
+
 
 @code {
+
+    private bool showMovies = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -60,6 +72,14 @@
     };
         StateHasChanged();
     }
+
+    private void ManageClick()
+    {
+        Console.WriteLine("Event of dad component");
+        showMovies = !showMovies;
+    }
+
+    private void ManageClick(string message) => Console.WriteLine(message);
 
     private List<Movie>? inBillboard = null;
 

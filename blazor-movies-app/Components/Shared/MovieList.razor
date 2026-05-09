@@ -1,9 +1,9 @@
-﻿@if (Movies != null)
+﻿@if (movies != null)
 {
     <div>
-        @foreach (var movie in Movies)
+        @foreach (var movie in movies)
         {
-            <MovieItem Movie="movie"/>
+            <MovieItem @key="movie.Id" Movie="movie" RemoveMovie="RemoveMovie"/>
         }
     </div>
     
@@ -16,10 +16,23 @@ else
 
 
 @code {
-    
+
     [Parameter, EditorRequired] public List<Movie>? Movies { get; set; }
+    private List<Movie>? movies = null;
 
+    protected override void OnInitialized()
+    {
+        movies = Movies;
+    }
 
+    protected override void OnParametersSet()
+    {
+        movies = Movies;
+    }
 
+    private void RemoveMovie(Movie movie)
+    {
+        movies!.Remove(movie);
+    }
 
 }

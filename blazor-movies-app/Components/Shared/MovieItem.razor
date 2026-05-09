@@ -2,10 +2,12 @@
 <p>
     Title:
     <b>@Movie.Title</b>
+    <BPButton Text="Remove" OnClick="@(() => RemoveMovie.InvokeAsync(Movie))" />
 </p>
      
 <p>Relase Date: <b>@Movie.ReleaseDate.ToString("dd MMM yyyy")</b></p>
 
 @code {
     [Parameter, EditorRequired] public required Movie Movie { get; set; }
+    [Parameter] public EventCallback<Movie> RemoveMovie { get; set; }
 }
