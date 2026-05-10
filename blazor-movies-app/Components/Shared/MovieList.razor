@@ -1,40 +1,14 @@
-﻿@if (movies is not null)
-{
-    <div>
-        @foreach (var movie in movies)
-        {
-            <MovieItem @key="movie.Id" Movie="movie" RemoveMovie="RemoveMovie"/>
-        }
-    </div>
-    
-}
-else
-{
-    @Loading
-}
-
+﻿<GenericList List="Movies">
+    <MovieItem @key="context.Id" Movie="context" RemoveMovie="RemoveMovie" />
+</GenericList>
 
 @code {
 
     [Parameter, EditorRequired] public List<Movie>? Movies { get; set; }
-    [Parameter] public RenderFragment? Loading { get; set; } =@<Loading/>;
-
-
-    private List<Movie>? movies = null;
-
-    protected override void OnInitialized()
-    {
-        movies = Movies;
-    }
-
-    protected override void OnParametersSet()
-    {
-        movies = Movies;
-    }
 
     private void RemoveMovie(Movie movie)
     {
-        movies!.Remove(movie);
+        Movies!.Remove(movie);
     }
 
 }
