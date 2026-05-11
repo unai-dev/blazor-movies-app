@@ -1,4 +1,7 @@
-﻿<GenericList List="Movies">
+﻿@using blazor_movies_app.Utils
+@inject IJSRuntime jSRuntime
+
+<GenericList List="Movies">
     <MovieItem @key="context.Id" Movie="context" RemoveMovie="RemoveMovie" />
 </GenericList>
 
@@ -6,9 +9,16 @@
 
     [Parameter, EditorRequired] public List<Movie>? Movies { get; set; }
 
-    private void RemoveMovie(Movie movie)
+    private async Task RemoveMovie(Movie movie)
     {
-        Movies!.Remove(movie);
+        var message =  $"¿Desea eliminar la pelicula {movie.Title}?";
+        var confirm = await jSRuntime.Confirm(message);
+
+        if (confirm)
+        {
+            Movies!.Remove(movie);
+        }
+
     }
 
 }
