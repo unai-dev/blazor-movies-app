@@ -1,9 +1,14 @@
 ﻿@page "/"
 @attribute [StreamRendering]
 @rendermode InteractiveServer
+@inject IMovieService movieService;
 
 
 <PageTitle>Home</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Pagina para visualizar peliculas" />
+</HeadContent>
 
 
 <input type="checkbox" @bind="showMovies" />
@@ -34,40 +39,9 @@ Show Movies
 
         await Task.Delay(2000);
 
-        inBillboard = new List<Movie>()
-    {
-        new Movie
-        {
-            Id = 1,
-            Title = "Captain America",
-            ReleaseDate = new DateTime(2025, 2, 14)
-        },
+        inBillboard = movieService.GetMovies();
 
-        new Movie
-        {
-            Id = 2,
-            Title = "Mission: Impossible - Dead Reckoning Part Two",
-            ReleaseDate = new DateTime(2025, 5, 23)
-        }
-
-    };
-        futuresPremiere = new List<Movie>()
-    {
-        new Movie
-        {
-            Id = 1,
-            Title = "Batman 22",
-            ReleaseDate = new DateTime(2026, 2, 14)
-        },
-
-        new Movie
-        {
-            Id = 2,
-            Title = "Fast and Furios X2",
-            ReleaseDate = new DateTime(2027, 5, 23)
-        }
-
-    };
+        futuresPremiere = movieService.GetMovies();
         StateHasChanged();
     }
 

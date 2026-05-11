@@ -1,10 +1,19 @@
+using blazor_movies_app;
 using blazor_movies_app.Components;
+using blazor_movies_app.Services;
+using blazor_movies_app.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddTransient<TransientService>();
+builder.Services.AddSingleton<ScopedService>();
+builder.Services.AddSingleton<SingletonService>();
+
+builder.Services.AddScoped<IMovieService, MovieService>();  
 
 var app = builder.Build();
 
