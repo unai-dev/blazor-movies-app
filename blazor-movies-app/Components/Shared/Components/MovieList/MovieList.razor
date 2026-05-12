@@ -1,0 +1,33 @@
+﻿@using blazor_movies_app.Utils
+@inject IJSRuntime jSRuntime
+
+<div class="my-4">
+    <div class="row g-4 text-center">
+        <GenericList List="Movies">
+            <ErrorBoundary>
+                <ChildContent>
+                    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                        <div class="h-100">
+                            <MovieItem @key="context.Id" Movie="context" />
+                        </div>
+                    </div>
+                </ChildContent>
+
+                <ErrorContent Context="error">
+                    <hr />
+                    The movie is not availble.
+                    <hr />
+                </ErrorContent>
+            </ErrorBoundary>
+
+        </GenericList>
+    </div>
+
+</div>
+
+
+@code {
+
+    [Parameter, EditorRequired] public List<Movie>? Movies { get; set; }
+
+}

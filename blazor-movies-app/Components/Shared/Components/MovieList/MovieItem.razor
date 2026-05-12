@@ -1,0 +1,10 @@
+﻿<img src="@Movie.PosterURL" class="img-fluid mb-2 w-100"  />
+<div class="card-body p-2">
+    <div class="fw-semibold">
+        @Movie.Title
+    </div>
+</div>
+     
+@code {
+    [Parameter, EditorRequired] public required Movie Movie { get; set; }
+}

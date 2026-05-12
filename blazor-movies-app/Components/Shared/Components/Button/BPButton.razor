@@ -1,15 +1,14 @@
 ﻿
-<button type="@Type.ToString()" @onclick="OnClick" class="@CssClass" disabled="@Disabled" @attributes="AdditionalAttributes">@ChildContent</button>
+<button @onclick="OnClick" class="@CssClass" disabled="@Disabled" @attributes="AdditionalAttributes">@ChildContent</button>
 
 @code {
-    // [Parameter] public string Text { get; set; } = "Sumbit";
     [Parameter] public bool Disabled { get; set; }
-    [Parameter] public ButtonType Type { get; set; } = ButtonType.Button;
     [Parameter] public Variante Variante { get; set; } = Variante.Primary;
     [Parameter] public Size Size { get; set; } = Size.Md;
-    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; } = @<text>Sumbit</text>;
+
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private void EventClick()
     {

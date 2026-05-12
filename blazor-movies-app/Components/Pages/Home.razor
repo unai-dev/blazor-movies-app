@@ -1,57 +1,27 @@
 ﻿@page "/"
 @attribute [StreamRendering]
-@rendermode InteractiveServer
 @inject IMovieService movieService;
 
 
 <PageTitle>Home</PageTitle>
 
-<HeadContent>
-    <meta name="description" content="Pagina para visualizar peliculas" />
-</HeadContent>
 
+<h3 class="fs-1">In Billboard:</h3>
+<MovieList Movies="inBillboard" />
 
-<input type="checkbox" @bind="showMovies" />
-Show Movies
-
-@if (showMovies)
-{
-    <h3 class="fs-1">In Billboard:</h3>
-    <MovieList Movies="inBillboard"/>
-
-    <h3 class="fs-1">Futures Premiere:</h3>
-    <MovieList Movies="futuresPremiere" />
-
-    <BPButton Type="ButtonType.Sumbit" Variante="Variante.Warning" Size="Size.Md" OnClick="ManageClick">Enviar</BPButton>
-}
+<h3 class="fs-1">Futures Premiere:</h3>
+<MovieList Movies="futuresPremiere" />
 
 
 @code {
 
-    private bool showMovies = false;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnInitialized()
     {
-        if (!firstRender)
-        {
-            return;
-        }
-
-        await Task.Delay(2000);
 
         inBillboard = movieService.GetMovies();
-
         futuresPremiere = movieService.GetMovies();
-        StateHasChanged();
     }
 
-    private void ManageClick()
-    {
-        Console.WriteLine("Event of dad component");
-        showMovies = !showMovies;
-    }
-
-    private void ManageClick(string message) => Console.WriteLine(message);
 
     private List<Movie>? inBillboard = null;
 

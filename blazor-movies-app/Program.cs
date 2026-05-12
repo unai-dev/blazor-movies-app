@@ -9,11 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddTransient<TransientService>();
-builder.Services.AddSingleton<ScopedService>();
-builder.Services.AddSingleton<SingletonService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
 
-builder.Services.AddScoped<IMovieService, MovieService>();  
 
 var app = builder.Build();
 
