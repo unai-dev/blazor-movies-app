@@ -14,7 +14,7 @@ namespace blazor_movies_app.Services
             {
                 Id = 1,
                 Title = "Captain America",
-                ReleaseDate = new DateTime(2025, 2, 14)
+                ReleaseDate = new DateTime(2025, 6, 30)
             },
 
             new Movie

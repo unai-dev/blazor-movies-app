@@ -2,7 +2,18 @@
 @inject IJSRuntime jSRuntime
 
 <GenericList List="Movies">
-    <MovieItem @key="context.Id" Movie="context" RemoveMovie="RemoveMovie" />
+    <ErrorBoundary>
+        <ChildContent>
+            <MovieItem @key="context.Id" Movie="context" RemoveMovie="RemoveMovie" />
+        </ChildContent>
+
+        <ErrorContent Context="error">
+            <hr />
+            The movie is not availble.
+            <hr />
+        </ErrorContent>
+    </ErrorBoundary>
+
 </GenericList>
 
 @code {
@@ -11,7 +22,7 @@
 
     private async Task RemoveMovie(Movie movie)
     {
-        var message =  $"¿Desea eliminar la pelicula {movie.Title}?";
+        var message = $"¿Desea eliminar la pelicula {movie.Title}?";
         var confirm = await jSRuntime.Confirm(message);
 
         if (confirm)
