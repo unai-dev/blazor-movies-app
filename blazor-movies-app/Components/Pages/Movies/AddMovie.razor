@@ -1,0 +1,17 @@
+﻿@page "/movie/add"
+@rendermode InteractiveServer
+
+@inject NavigationManager navigationManager
+
+
+<h3>AddMovie</h3>
+
+<BPButton OnClick="Add">Add Movie</BPButton>
+
+@code {
+
+    void Add()
+    {
+        navigationManager.NavigateTo("/movie");
+    }
+}
