@@ -1,20 +1,14 @@
-﻿
-<button @onclick="OnClick" class="@CssClass" disabled="@Disabled" type="@Type.ToString()" @attributes="AdditionalAttributes">@ChildContent</button>
+﻿<NavLink href="@Href" class="@CssClass" @attributes="AdditionalAttributes">
+    @ChildContent
+</NavLink>
 
 @code {
-    [Parameter] public bool Disabled { get; set; }
-    [Parameter] public Variante Variante { get; set; } = Variante.Primary;
-    [Parameter] public ButtonType Type { get; set; } = ButtonType.Sumbit;
+    [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; }
+    [Parameter, EditorRequired] public string Href { get; set; } = default!;
     [Parameter] public Size Size { get; set; } = Size.Md;
-    [Parameter] public EventCallback OnClick { get; set; }
-    [Parameter] public RenderFragment? ChildContent { get; set; } = @<text>Sumbit</text>;
+    [Parameter] public Variante Variante { get; set; } = Variante.Primary;
 
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
-
-    private void EventClick()
-    {
-        Console.WriteLine("Hello World!");
-    }
 
     private string CssClass
     {
