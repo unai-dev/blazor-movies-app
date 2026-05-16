@@ -1,0 +1,80 @@
+﻿
+@implements IDisposable
+
+@inject IJSRuntime jSRuntime
+
+
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"/> 
+
+<EditForm EditContext="editContext" OnValidSubmit="@OnValidSumbit">
+    
+    <DataAnnotationsValidator/>
+
+    <BPInputText Label="Nombre" @bind-Value="@Gender.Name"/>
+
+    <BPButton Type="ButtonType.Sumbit" Disabled="InvalidForm || CurrentPost">
+        @(
+            CurrentPost ?@<text>Enviando...</text>
+        :@<text>Enviar</text>)
+        
+    </BPButton>
+
+</EditForm>
+
+@code {
+
+    [Parameter, EditorRequired] public Gender Gender { get; set; } = null!;
+    [Parameter, EditorRequired] public bool FormPostWithExit { get; set; } = false;
+    [Parameter, EditorRequired] public bool CurrentPost { get; set; } = false;
+    [Parameter, EditorRequired] public EventCallback OnValidSumbit { get; set; }
+    [Parameter] public bool InvalidForm { get; set; } = true;
+
+    private EditContext? editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(Gender);
+        editContext.OnFieldChanged += HandleFieldChanged;
+    }
+
+    private void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        if (editContext is not null)
+        {
+            InvalidForm = !editContext.Validate();
+            StateHasChanged();
+        }
+    }
+
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        var isFormEdited = editContext!.IsModified();
+
+        if (!isFormEdited) return; 
+
+
+        if (FormPostWithExit) return;
+
+        var confirm = await jSRuntime.Confirm("¿Si abandona la pagina perdera los cambios? ¿Desea salir?");
+
+        if (confirm)
+        {
+            return;
+        }
+
+        context.PreventNavigation();
+
+    }
+
+    
+    public void Dispose()
+    {
+        if (editContext is not null)
+        {
+            editContext.OnFieldChanged -= HandleFieldChanged;
+        }
+    }
+
+}

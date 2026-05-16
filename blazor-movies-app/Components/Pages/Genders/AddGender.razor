@@ -1,98 +1,45 @@
-﻿@page "/gender/add"
+﻿@page "/genders/add"
 
 @rendermode InteractiveServer
 
-@implements IDisposable
 
-@inject IJSRuntime jSRuntime
 @inject NavigationManager navigationManager
 
-<h3>Add Gender</h3>
+<h3>Agregar nuevo genero</h3>
 
-<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"/> 
+<GenderForm CurrentPost="@currentPost"
+            FormPostWithExit="@formPostExit"
+            Gender="@gender"
+            OnValidSumbit="@Add" />
 
-<EditForm EditContext="editContext" OnValidSubmit="Add">
-    
-    <DataAnnotationsValidator/>
-
-    <BPInputText Label="Nombre" @bind-Value="gender.Name"/>
-
-    <BPButton Type="ButtonType.Sumbit" Disabled="invalidForm || currentPost">
-        @(
-            currentPost ?@<text>Enviando...</text>
-        :@<text>Enviar</text>)
-        
-    </BPButton>
-
-</EditForm>
 
 @code {
     private Gender gender = null!;
-    private EditContext? editContext;
-    private bool invalidForm = true;
+
     private bool currentPost = false;
-    private bool formPostExit = false; 
+    private bool formPostExit = false;
 
     protected override void OnInitialized()
     {
         gender = new Gender();
-        editContext = new(gender);
-        editContext.OnFieldChanged += HandleFieldChanged;
     }
 
-    private void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
-    {
-        if (editContext is not null)
-        {
-            invalidForm = !editContext.Validate();
-            StateHasChanged();
-        }
-    }
-
-    public void Dispose()
-    {
-        if (editContext is not null)
-        {
-            editContext.OnFieldChanged -= HandleFieldChanged;
-        }
-    }
-
-    private void Add()
+    private async Task Add()
     {
         if (!currentPost)
         {
             currentPost = true;
 
             Console.WriteLine("Ejecutando metodo Crear");
+            await Task.Delay(2000);
             Console.WriteLine($"Nombre del genero: {gender.Name}");
 
             currentPost = false;
             formPostExit = true;
 
-            navigationManager.NavigateTo("/gender");
+            StateHasChanged();
+
+            navigationManager.NavigateTo("/genders");
         }
     }
-
-    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
-    {
-        var isFormEdited = editContext!.IsModified();
-
-        if (!isFormEdited) return; 
-
-
-        if (formPostExit) return;
-
-        var confirm = await jSRuntime.Confirm("¿Si abandona la pagina perdera los cambios? ¿Desea salir?");
-
-        if (confirm)
-        {
-            return;
-        }
-
-        context.PreventNavigation();
-
-        
-
-    }
-        
 }

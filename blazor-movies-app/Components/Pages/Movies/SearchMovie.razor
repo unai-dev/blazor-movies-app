@@ -1,0 +1,91 @@
+﻿@page "/movies/search"
+@inject IMovieService movieService
+
+<h3>Buscar peliculas</h3>
+
+<div class="row g-3 align-items-center mb-3">
+
+    <div class="cols-sm-3">
+        <input type="text" class="form-control" id="@title" placeholder="Buscar Pelicula"
+               @bind="title"
+               @bind:event="oninput" @onkeypress="@((KeyboardEventArgs e) => TitleKeyPress(e))" autocomplete="off" />
+
+    </div>
+    <div class="cols-sm-3">
+        <select class="form-select" @bind="@genderId">
+            <option value="0">-- Selecione un genero --</option>
+
+            @foreach (var gender in  genders)
+            {
+                <option value="@gender.Id">@gender.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-sm-6 d-flex">
+        <div class="me-2">
+            <BPInputCheckbox Label="Futuros Estrenos" @bind-Value="futurePremiere" />
+        </div>
+
+        <div class="me-2">
+            <BPInputCheckbox Label="En Cartelera" @bind-Value="inBillboard" />
+        </div>
+
+        <div class="me-2">
+            <BPInputCheckbox Label="Mas Votadas" @bind-Value="topMovies" />
+        </div>
+    </div>
+
+    <div class="col-12">
+        <BPButton OnClick="@LoadNewMovies">Filtrar</BPButton>
+        <BPButton Variante="Variante.Error" OnClick="@Clean">Limpiar</BPButton>
+    </div>
+
+</div>
+
+<MovieList Movies="@movies" />
+
+@code {
+    private string title = string.Empty;
+    private int genderId = 0;
+    private bool futurePremiere = false;
+    private bool inBillboard = false;
+    private bool topMovies = false;
+
+
+    private List<Gender> genders = new List<Gender>();
+    private List<Movie>? movies;
+
+    protected override void OnInitialized()
+    {
+        genders = new List<Gender> { new() { Id = 1, Name = "Action" }, new() { Id = 2, Name = "Vida" } };
+        movies = movieService.GetMovies();
+    }
+
+    private void TitleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            LoadNewMovies();
+        }
+    }
+
+    private void LoadNewMovies()
+    {
+        movies = movieService
+        .GetMovies()
+        .Where(x => x.Title.ToLower()
+        .Contains(title.ToLower()))
+        .ToList();
+    }
+
+    private void Clean()
+    {
+        movies = movieService.GetMovies();
+        title = string.Empty;
+        genderId = 0;
+        futurePremiere = false;
+        inBillboard = false;
+        topMovies = false;
+    }
+}

@@ -1,7 +1,56 @@
-﻿@page "/gender/edit/{Id:int}"
+﻿@page "/genders/edit/{Id:int}"
+@inject NavigationManager navigationManager
 
-<h3>EditGender</h3>
+
+<h3>Editar Genero</h3>
+
+@if (gender is null)
+{
+    <Loading />
+}
+else
+{
+    <GenderForm CurrentPost="@currentPost"
+                FormPostWithExit="@formPostWithExit"
+                Gender="@gender"
+                OnValidSumbit="Edit"
+                InvalidForm="false"/>
+
+}
+
 
 @code {
     [Parameter] public int Id { get; set; }
+
+    private Gender gender = null!;
+
+    private bool formPostWithExit = false;
+    private bool currentPost = false;
+
+    protected override void OnInitialized()
+    {
+        gender = new()
+        {
+            Id = Id,
+            Name = "Accion"
+        };
+    }
+
+    private async Task Edit()
+    {
+        if (!currentPost)
+        {
+            currentPost = true;
+            Console.WriteLine($"Editando pelicula con id {Id}");
+            await Task.Delay(2000);
+            Console.WriteLine($"Nuevo nombre: {gender.Name}");
+
+            currentPost = false;
+            formPostWithExit = true;
+
+            StateHasChanged();
+
+            navigationManager.NavigateTo("/genders");
+        }
+    }
 }
