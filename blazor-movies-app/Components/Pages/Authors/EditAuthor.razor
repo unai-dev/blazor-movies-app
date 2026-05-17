@@ -1,9 +1,57 @@
 ﻿@page "/authors/edit/{Id:int}"
+@inject NavigationManager navigationManager
 
-<h3>Editar autor</h3>
+
+<h3>Editar Autor</h3>
+
+@if (author is null)
+{
+    <Loading />
+}
+else
+{
+    <FormAuthor Author="@author"
+                CurrentPost="@currentPost"
+                FormPostWithExit="@postWithExit"
+                OnValidSumbit="@Edit" />
+
+}
 
 @code {
-
     [Parameter] public int Id { get; set; }
 
+
+    private bool currentPost = false;
+    private bool postWithExit = false;
+    private Author author = null!;
+
+    protected override void OnInitialized()
+    {
+        author = new Author()
+        {
+            Id = 1,
+            Name = "Unai Villar",
+            Birhdate = DateTime.UtcNow,
+            ImageURL = "..."
+        };
+    }
+
+    private async Task Edit()
+    {
+        if (!currentPost)
+        {
+            currentPost = true;
+
+            Console.WriteLine($"Agregando autor...");
+            await Task.Delay(2000);
+
+            Console.WriteLine($"Agregando autor con nombre {author.Name}");
+
+            currentPost = false;
+            postWithExit = true;
+            StateHasChanged();
+
+            navigationManager.NavigateTo("/authors");
+        }
+    }
 }

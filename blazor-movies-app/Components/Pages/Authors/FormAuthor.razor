@@ -1,0 +1,47 @@
+﻿@implements IDisposable
+
+
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSumbit">
+    <DataAnnotationsValidator/>
+    <BPInputText Label="Nombre" @bind-Value="Author.Name" />
+    <BPInputDate Label="Fecha de Nacimiento" @bind-Value="Author.Birhdate" />
+    
+    <BPButton Type="ButtonType.Sumbit" Disabled="InvalidForm || CurrentPost">
+        @( CurrentPost ?  @<text>Enviando...</text> : @<text>Enviar</text> )
+    </BPButton>
+</EditForm>
+
+@code {
+
+    private EditContext? editContext;
+
+    [Parameter, EditorRequired] public Author Author { get; set; } = null!;
+    [Parameter, EditorRequired] public bool FormPostWithExit { get; set; } = false;
+    [Parameter, EditorRequired] public bool CurrentPost { get; set; } = false;
+    [Parameter, EditorRequired] public EventCallback OnValidSumbit { get; set; }
+    [Parameter] public bool InvalidForm { get; set; } = true;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(Author);
+        editContext.OnFieldChanged += HandleFieldChanged;
+
+    }
+
+    private void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        if (editContext is not null)
+        {
+            InvalidForm = !editContext.Validate();
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        if (editContext is not null)
+        {
+            editContext.OnFieldChanged -= HandleFieldChanged;
+        }
+    }
+}
